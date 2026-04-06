@@ -9,7 +9,6 @@ const progressContainer = document.querySelector('.progressTaskContainer')
 const doneContainer = document.querySelector('.donetaskContainer')
 
 
-console.log(localStorage.getItem('taskarray'))
 
 function handleSaveLocalStorage(obj) {
 
@@ -44,7 +43,7 @@ function HandleDragElement(column, container) {
         column.classList.remove("onEnter");
         let taskId = dropElement.getAttribute("data-id")
 
-        let taskarray = JSON.parse(localStorage.getItem('taskarray'))
+        let taskarray = JSON.parse(localStorage.getItem('taskarray')) 
         taskarray = taskarray.map(element => {
             if (element.id == taskId) {
                 if (column === toDo) element.taskStatus = "Todo"
@@ -54,9 +53,8 @@ function HandleDragElement(column, container) {
             return element
         })
 
-
-        localStorage.setItem('taskarray', JSON.stringify(taskarray))
-        displayTaskCard()
+        localStorage.setItem('taskarray', JSON.stringify(taskarray)) 
+        updateCount()
 
     });
 }
@@ -112,12 +110,8 @@ addTaskButton.addEventListener("click", () => {
     addContainer.style.display = "none";
 });
 
-
-function displayTaskCard() {
-    todoContainer.innerHTML = ""
-    progressContainer.innerHTML = ""
-    doneContainer.innerHTML = ""
-    let taskarray = JSON.parse(localStorage.getItem('taskarray'))
+function updateCount() {
+    let taskarray = JSON.parse(localStorage.getItem('taskarray')) || []
 
     let todoCount = 0
     let progressCount = 0
@@ -135,8 +129,18 @@ function displayTaskCard() {
     document.querySelector('#TodoCount').innerHTML = todoCount
     document.querySelector('#ProgressCount').innerHTML = progressCount
     document.querySelector('#DoneCount').innerHTML = doneCount
+}
 
-    taskarray.forEach((Element, index) => {
+
+function displayTaskCard() {
+    todoContainer.innerHTML = ""
+    progressContainer.innerHTML = ""
+    doneContainer.innerHTML = ""
+    let taskarray = JSON.parse(localStorage.getItem('taskarray')) || []
+
+
+
+    taskarray.forEach((Element) => {
         const div = document.createElement("div");
         div.setAttribute("data-id", Element.id);
         div.draggable = true;
@@ -163,7 +167,7 @@ function displayTaskCard() {
 
         button.addEventListener('click', () => {
             let array = JSON.parse(localStorage.getItem('taskarray'))
-            array.splice(index, 1)
+            array = array.filter(item => item.id != Element.id)
             localStorage.setItem('taskarray', JSON.stringify(array))
             displayTaskCard()
         })
@@ -171,10 +175,12 @@ function displayTaskCard() {
 
     const tasks = document.querySelectorAll(".task");
     tasks.forEach((task) => {
-        task.addEventListener("drag", (e) => {
+        task.addEventListener("dragstart", (e) => {
             dropElement = task;
         });
     });
+    updateCount()
+
 }
 
 
