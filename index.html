@@ -18,13 +18,7 @@
           <span> To Do </span>
           <span>Count</span>
         </div>
-        <div draggable="true" class="task dragging">
-          <h2>Task 1</h2>
-          <p>Task 1 description</p>
-          <div>
-            <button>Delete</button>
-          </div>
-        </div>
+       
       </div>
 
       <div class="progress column">
@@ -43,13 +37,20 @@
       </div>
     </div>
 
-    <div class="modal add-container">
+    <div class="modal" id="addcontainer">
       <div class="bg"></div>
       <div class="center">
+        <div class="close" id="closeButton">
+          <span aria-hidden="true">&times;</span>
+        </div>
         <h3>Add Task</h3>
-        <input type="text" placeholder="Enter Task Name" />
-        <textarea placeholder="Task Description"></textarea>
-        <button class="add">Add task</button>
+        <input id="taskName" type="text" placeholder="Enter Task Name" />
+        <textarea
+          id="taskDescription"
+          placeholder="Task Description"
+        ></textarea>
+        <div class="error"></div>
+        <button class="add" id="AddTaskButton">Add task</button>
       </div>
     </div>
 
