@@ -9,18 +9,16 @@
   <body>
     <div class="navBar">
       <span> Kanban Board </span>
-
-      <button>Add Task</button>
+      <button id="addTask">Add Task</button>
     </div>
 
     <div class="mainBody">
-      <div class="to-do">
+      <div class="to-do column">
         <div class="header">
           <span> To Do </span>
           <span>Count</span>
         </div>
-
-        <div class="task dragging" draggable="true">
+        <div draggable="true" class="task dragging">
           <h2>Task 1</h2>
           <p>Task 1 description</p>
           <div>
@@ -29,19 +27,29 @@
         </div>
       </div>
 
-      <div class="progress">
+      <div class="progress column">
         <div class="header">
           <span> Progress </span>
           <span>Count</span>
         </div>
       </div>
 
-      <div class="done">
+      <div class="done column">
         <div class="header">
           <span> Done </span>
 
           <span>Count</span>
         </div>
+      </div>
+    </div>
+
+    <div class="modal add-container">
+      <div class="bg"></div>
+      <div class="center">
+        <h3>Add Task</h3>
+        <input type="text" placeholder="Enter Task Name" />
+        <textarea placeholder="Task Description"></textarea>
+        <button class="add">Add task</button>
       </div>
     </div>
 
