@@ -42,6 +42,22 @@ function HandleDragElement(column, container) {
         e.preventDefault();
         container.append(dropElement);
         column.classList.remove("onEnter");
+        let taskId = dropElement.getAttribute("data-id")
+
+        let taskarray = JSON.parse(localStorage.getItem('taskarray'))
+        taskarray = taskarray.map(element => {
+            if (element.id == taskId) {
+                if (column === toDo) element.taskStatus = "Todo"
+                if (column === progress) element.taskStatus = "Progress"
+                if (column === done) element.taskStatus = "Done"
+            }
+            return element
+        })
+
+
+        localStorage.setItem('taskarray', JSON.stringify(taskarray))
+        displayTaskCard()
+
     });
 }
 
@@ -74,6 +90,8 @@ taskName.addEventListener("input", () => {
     errorMessage.innerHTML = "";
 });
 
+
+
 addTaskButton.addEventListener("click", () => {
     let taskNameValue = taskName.value.trim();
     let taskDescriptionValue = taskDescription.value.trim();
@@ -83,6 +101,7 @@ addTaskButton.addEventListener("click", () => {
         return;
     }
     handleSaveLocalStorage({
+        id: Date.now() + Math.floor(Math.random() * 1000),
         taskNameValue,
         taskDescriptionValue,
         taskStatus: "Todo",
@@ -94,13 +113,32 @@ addTaskButton.addEventListener("click", () => {
 });
 
 
-
 function displayTaskCard() {
-
     todoContainer.innerHTML = ""
+    progressContainer.innerHTML = ""
+    doneContainer.innerHTML = ""
     let taskarray = JSON.parse(localStorage.getItem('taskarray'))
+
+    let todoCount = 0
+    let progressCount = 0
+    let doneCount = 0
+
+    taskarray.forEach(element => {
+        if (element.taskStatus === 'Todo') {
+            todoCount = todoCount + 1
+        } else if (element.taskStatus === "Progress") {
+            progressCount = progressCount + 1
+        } else if (element.taskStatus === "Done") {
+            doneCount = doneCount + 1
+        }
+    })
+    document.querySelector('#TodoCount').innerHTML = todoCount
+    document.querySelector('#ProgressCount').innerHTML = progressCount
+    document.querySelector('#DoneCount').innerHTML = doneCount
+
     taskarray.forEach((Element, index) => {
         const div = document.createElement("div");
+        div.setAttribute("data-id", Element.id);
         div.draggable = true;
         div.classList.add("task");
         const h2 = document.createElement("h2");
@@ -114,8 +152,14 @@ function displayTaskCard() {
         const button = document.createElement("button");
         button.innerHTML = "delete";
         buttonDiv.append(button);
-        todoContainer.append(div);
 
+        if (Element.taskStatus === 'Todo') {
+            todoContainer.append(div);
+        } else if (Element.taskStatus === 'Progress') {
+            progressContainer.append(div);
+        } else if (Element.taskStatus === 'Done') {
+            doneContainer.append(div);
+        }
 
         button.addEventListener('click', () => {
             let array = JSON.parse(localStorage.getItem('taskarray'))
